@@ -1,0 +1,349 @@
+/* Memory flipbook styles */
+html {
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* App viewer style */
+  background: radial-gradient(circle at center, #e7ded0 0%, #cfc3ad 100%);
+  font-family: 'Lato', sans-serif;
+  height: 100%;
+}
+
+/* Hide website elements for pure flipbook viewer */
+.navbar, .menu-hero, .site-footer {
+  display: none !important;
+}
+
+.menu-page {
+  --controls-clearance: 96px; /* space reserved above the bottom for the floating control bar */
+  width: 100vw;
+  height: 100vh;
+  height: 100svh; /* smallest possible viewport — guaranteed visible even while the URL bar is showing */
+  height: var(--app-height, 100svh); /* authoritative: real measured visible height from JS, most reliable across browsers */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.bg-doodles {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16 6C18 9 18 15 15 18C12 21 6 21 4 18C2 15 2 9 5 6C8 3 14 3 16 6Z' fill='%23a8886a' fill-opacity='0.06'/%3E%3C/svg%3E");
+  background-position: 10% 20%, 85% 15%, 75% 85%;
+  background-size: 80px, 60px, 120px;
+  background-repeat: no-repeat;
+  animation: floatDoodles 25s infinite alternate ease-in-out;
+}
+
+@keyframes floatDoodles {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(3deg); }
+  100% { transform: translateY(5px) rotate(-2deg); }
+}
+
+.flipbook-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 3000px;
+  width: 100%;
+  flex: 1;
+  min-height: 0; /* lets this flex child actually shrink to fit instead of pushing content off-screen */
+  padding: 2.5vh 2.5vw calc(var(--controls-clearance) + 1.5vh) 2.5vw;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+}
+
+#flipbook {
+  width: 100%;
+  height: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  filter: drop-shadow(0 20px 40px rgba(90, 70, 45, 0.25));
+}
+
+.flipbook-controls {
+  position: absolute;
+  bottom: max(30px, env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  background: rgba(40, 32, 22, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 12px 24px;
+  border-radius: 40px;
+  border: 1px solid rgba(215, 180, 140, 0.3);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  z-index: 100;
+  max-width: calc(100vw - 20px);
+}
+.ctrl-btn {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: #d8b98c;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ctrl-btn:hover {
+  background: #d8b98c;
+  color: #2a2015;
+  transform: scale(1.1);
+}
+.ctrl-btn:active {
+  transform: scale(0.95);
+}
+#pageLabel {
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 700;
+  color: #4a3d2c;
+  min-width: 130px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.65);
+  padding: 8px 16px;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Page base */
+.page {
+  background: linear-gradient(180deg, #fffdf8, #f6efe1);
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  font-family: 'Lato', sans-serif;
+  color: #3a2f22;
+  overflow: hidden;
+  border-left: 1px solid rgba(0,0,0,0.03);
+  border-right: 1px solid rgba(0,0,0,0.05);
+  box-shadow:
+    inset 0 0 30px rgba(138, 120, 96, 0.05),
+    inset 15px 0 30px -10px rgba(0,0,0,0.08),
+    inset -15px 0 30px -10px rgba(0,0,0,0.08);
+  position: relative;
+}
+
+/* Cover pages */
+.page-cover {
+  background: linear-gradient(135deg, #2c2318, #4d3d29);
+  color: #f3e9da;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+  height: 100%;
+  box-sizing: border-box;
+  box-shadow: inset -5px 0 30px rgba(0,0,0,0.4);
+  border-right: 4px solid #1a140d;
+}
+.page-cover .cover-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.5em;
+  font-size: 12px;
+  opacity: 0.8;
+  color: #d8b98c;
+}
+.page-cover h2 {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: clamp(2.6rem, 9vw, 4.5rem);
+  margin: 12px 0;
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+  color: #f3e9da;
+}
+.page-cover p.cover-line {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  max-width: 260px;
+  opacity: 0.85;
+  line-height: 1.6;
+}
+.page-cover .divider {
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #d8b98c, transparent);
+  margin: 16px 0;
+}
+.page-cover .signature {
+  font-family: 'Caveat', cursive;
+  font-size: 1.6rem;
+  margin-top: 10px;
+  opacity: 0.9;
+}
+
+/* Cover page when a real photo is used instead of plain text */
+.page-cover-photo {
+  padding: 0;
+  position: relative;
+  display: block;
+}
+.page-cover-photo .photo-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.page-cover-photo .photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.page-cover-photo .cover-overlay {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 60px 24px 32px;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(20,15,8,0.75) 100%);
+  text-align: center;
+}
+.page-cover-photo .cover-overlay h2 {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 7.5vw, 3.6rem);
+  color: #f3e9da;
+  margin: 0 0 8px;
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+}
+.page-cover-photo .cover-overlay .cover-line {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  color: #f3e9da;
+  opacity: 0.9;
+  margin: 0;
+}
+
+/* --- Full-page photo page (one photo per page) --- */
+.photo-page {
+  padding: 0;
+  position: relative;
+}
+.photo-page .photo-frame {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    135deg,
+    #e5ddcc,
+    #e5ddcc 10px,
+    #ddd3bd 10px,
+    #ddd3bd 20px
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.photo-page .photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.photo-page .photo-frame svg {
+  width: 22%;
+  height: 22%;
+  opacity: 0.35;
+}
+.photo-page .caption-bar {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 36px 24px 20px;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(20,15,8,0.65) 100%);
+  text-align: center;
+}
+.photo-page .caption-bar p {
+  font-family: 'Caveat', cursive;
+  font-size: 1.4rem;
+  color: #fdf8ee;
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+.photo-page::before, .photo-page::after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  width: 36px; height: 36px;
+  border-color: rgba(255,255,255,0.55);
+  pointer-events: none;
+}
+.photo-page::before { top: 14px; left: 14px; border-top: 2px solid; border-left: 2px solid; }
+.photo-page::after { bottom: 14px; right: 14px; border-bottom: 2px solid; border-right: 2px solid; }
+
+/* Tablet (portrait tablets, small laptops) */
+@media (max-width: 1024px) {
+  .menu-page { --controls-clearance: 90px; }
+}
+
+/* Phone and small tablet */
+@media (max-width: 768px) {
+  .menu-page { --controls-clearance: 84px; }
+  .flipbook-wrap { perspective: 1500px; }
+  .page { padding: 24px 18px; }
+  .photo-page { padding: 0; }
+  .photo-page .caption-bar { padding: 28px 16px 16px; }
+  .photo-page .caption-bar p { font-size: 1.15rem; }
+  .flipbook-controls { gap: 10px; padding: 10px 16px; }
+  .ctrl-btn { width: 40px; height: 40px; font-size: 19px; }
+  #pageLabel { min-width: 96px; font-size: 11px; padding: 7px 12px; }
+  .menu-hero { padding: 0 16px; }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  .menu-page { --controls-clearance: 76px; }
+  .page { padding: 18px 14px; }
+  .flipbook-controls { gap: 8px; padding: 8px 12px; }
+  .ctrl-btn { width: 36px; height: 36px; font-size: 17px; }
+  #pageLabel { min-width: 84px; font-size: 10px; padding: 6px 10px; letter-spacing: 0.2em; }
+  .page-cover .cover-line, .page-cover-photo .cover-overlay .cover-line { font-size: 0.85rem; }
+}
+
+/* Short / landscape screens (phones rotated, small laptops with little vertical room) */
+@media (max-height: 520px) {
+  .menu-page { --controls-clearance: 60px; }
+  .flipbook-wrap { padding: 1.2vh 2vw calc(var(--controls-clearance) + 0.8vh) 2vw; }
+  .flipbook-controls { bottom: max(8px, env(safe-area-inset-bottom, 0px)); }
+  .page { padding: 16px 20px; }
+  .page-cover h2, .page-cover-photo .cover-overlay h2 { font-size: clamp(2rem, 6vw, 2.8rem); margin: 6px 0; }
+  .page-cover .divider { margin: 8px 0; }
+}
+
+.site-footer {
+  text-align: center;
+  padding: 20px;
+  background: #2a1f18;
+  color: #8a7860;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 0.1em;
+  font-size: 0.9rem;
+}

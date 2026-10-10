@@ -1,0 +1,10 @@
+{
+   "coverImage": "photos/1.png",
+  "backCoverImage": "photos/6.png",
+  "photos": [
+       { "src": "photos/2.png" },
+    { "src": "photos/3.png"},
+    { "src": "photos/4.png" },
+    { "src": "photos/5.png"}    
+  ]
+}
